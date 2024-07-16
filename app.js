@@ -1,4 +1,7 @@
 import HashMap from './hashMap.js';
+import HashSet from './HashSet.js';
+
+// HashMap TEST
 
 const test = new HashMap();
 
@@ -32,3 +35,32 @@ console.log(test.values()); // ['diamond','green','yellow','purple','white','blu
 console.log(test.entries()); // [[ 'moon', 'diamond' ],[ 'frog', 'green' ],[ 'banana', 'yellow' ],[ 'grape', 'purple' ],[ 'ice cream', 'white' ],[ 'jacket', 'blue' ],[ 'kite', 'pink' ],[ 'elephant', 'cyan' ],[ 'apple', 'red' ],[ 'hat', 'black' ],[ 'dog', 'brown' ],[ 'lion', 'golden' ]]
 console.log(test.clear()); // Cleared
 console.log(test.buckets); // [ <16 empty items> ]
+
+// HashSet TEST
+
+const testSec = new HashSet();
+
+testSec.set('apple');
+testSec.set('banana');
+testSec.set('carrot');
+testSec.set('dog');
+testSec.set('elephant');
+testSec.set('frog');
+testSec.set('grape');
+testSec.set('hat');
+testSec.set('ice cream');
+testSec.set('jacket');
+testSec.set('kite');
+testSec.set('lion');
+
+testSec.set('moon'); // reached the load factor, double the size of buckets
+
+console.log(testSec.buckets);
+
+console.log(testSec.get('lion')); // golden
+console.log(testSec.has('hat')); // true
+console.log(testSec.remove('carrot')); // true
+console.log(testSec.length()); // 12
+console.log(testSec.keys()); // ['moon','frog','banana','grape','ice cream','jacket','kite','elephant','apple','hat','dog','lion',]
+console.log(testSec.clear()); // Cleared
+console.log(testSec.buckets); // [ <16 empty items> ]

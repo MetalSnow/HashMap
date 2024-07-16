@@ -1,6 +1,6 @@
-import { HashMapNode } from './node.js';
+import { HashSetNode } from './node.js';
 
-export default class HashMap {
+export default class HashSet {
   constructor(capacity = 16) {
     this.size = 0;
     this.capacity = capacity;
@@ -29,20 +29,17 @@ export default class HashMap {
         let curr = bucket;
         let idx = this.hash(bucket.key);
         if (newBuckets[idx]) {
-          newBuckets[idx].next = new HashMapNode(bucket.key, bucket.value);
+          newBuckets[idx].next = new HashSetNode(bucket.key);
         } else {
-          newBuckets[idx] = new HashMapNode(bucket.key, bucket.value);
+          newBuckets[idx] = new HashSetNode(bucket.key);
         }
 
         while (curr.next) {
           idx = this.hash(bucket.next.key);
           if (newBuckets[idx]) {
-            newBuckets[idx].next = new HashMapNode(
-              curr.next.key,
-              curr.next.value
-            );
+            newBuckets[idx].next = new HashSetNode(curr.next.key);
           } else {
-            newBuckets[idx] = new HashMapNode(curr.next.key, curr.next.value);
+            newBuckets[idx] = new HashSetNode(curr.next.key);
           }
 
           curr = curr.next;
@@ -53,7 +50,7 @@ export default class HashMap {
     this.buckets = newBuckets;
   }
 
-  set(key, value) {
+  set(key) {
     if (!this.has(key)) {
       if (this.size >= this.loadFactor * this.capacity) {
         this.growBuckets();
@@ -61,14 +58,12 @@ export default class HashMap {
     }
 
     const idx = this.hash(key);
-    const node = new HashMapNode(key, value);
+    const node = new HashSetNode(key);
     let current = this.buckets[idx];
 
     if (!this.buckets[idx]) {
       this.buckets[idx] = node;
       this.size += 1;
-    } else if (this.buckets[idx].key === key) {
-      this.buckets[idx].value = value;
     } else {
       while (current.next) {
         current = current.next;
@@ -169,51 +164,5 @@ export default class HashMap {
     });
 
     return keys;
-  }
-
-  values() {
-    let values = [];
-
-    this.buckets.forEach((bucket) => {
-      let curr = bucket;
-      if (bucket) {
-        values.push(bucket.value);
-
-        while (curr.next) {
-          values.push(curr.next.value);
-
-          curr = curr.next;
-        }
-      }
-    });
-
-    return values;
-  }
-
-  entries() {
-    let entries = [];
-    let arr = [];
-
-    this.buckets.forEach((bucket) => {
-      let curr = bucket;
-      if (bucket) {
-        arr.push(bucket.key);
-        arr.push(bucket.value);
-        entries.push(arr);
-
-        arr = [];
-
-        while (curr.next) {
-          arr.push(curr.next.key);
-          arr.push(curr.next.value);
-          entries.push(arr);
-
-          arr = [];
-          curr = curr.next;
-        }
-      }
-    });
-
-    return entries;
   }
 }
